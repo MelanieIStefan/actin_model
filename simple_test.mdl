@@ -1,0 +1,917 @@
+/* simulation parameters */
+iterations = 1e3
+dt = 1e-4
+halfbox = 0.01
+
+TIME_STEP = dt
+ITERATIONS = iterations
+INTERACTION_RADIUS = 0.003
+
+filament_extension = 2e-3
+Arp23_A_nucleation_1 = 1e-3
+Arp23_A_nucleation_2 = 5e-2
+depolymerization = 1e-3
+Arp23_A_dissociation = 1e1000000
+slow_ATP_to_ADP = 1e-2
+medium_ATP_to_ADP = 2e-2
+fast_ATP_to_ADP = 3e-2
+
+PARTITION_X = [[-halfbox TO halfbox STEP halfbox/5]]
+PARTITION_Y = [[-halfbox TO halfbox STEP halfbox/5]]
+PARTITION_Z = [[-halfbox TO halfbox STEP halfbox/5]]
+
+DEFINE_MOLECULES
+{
+        Arp23 {DIFFUSION_CONSTANT_3D = 1e-6}
+        Arp23_A {DIFFUSION_CONSTANT_3D = 1e-6} //complex
+	not_Arp23_A {DIFFUSION_CONSTANT_3D = 1e-6} //complex
+	empty {DIFFUSION_CONSTANT_3D = 1e-6} //complex
+	not_empty {DIFFUSION_CONSTANT_3D = 1e-6} //complex
+	F_actin_ADP {DIFFUSION_CONSTANT_3D = 1e-6} //complex
+	not_F_actin_ADP {DIFFUSION_CONSTANT_3D = 1e-6} //complex
+	F_actin_ATP {DIFFUSION_CONSTANT_3D = 1e-6} //complex
+	not_F_actin_ATP {DIFFUSION_CONSTANT_3D = 1e-6} //complex
+	G_actin_ADP {DIFFUSION_CONSTANT_3D = 1e-6}
+	G_actin_ATP {DIFFUSION_CONSTANT_3D = 1e-6}
+}
+
+DEFINE_COMPLEX_MOLECULE F_actin {
+
+NUMBER_OF_SUBUNITS = [5, 5, 5, 4]
+
+SUBUNIT[1:5, 1:5, 1:2, 1] = empty  //first 2 xy-planes
+SUBUNIT[1:5, 1:5, 4:5, 1] = empty //last 2 xy-planes
+SUBUNIT[1:5, 1, 3, 1] = empty //first y-row of the 3rd xy-plane
+SUBUNIT[1, 2:5, 3, 1] = empty //first column of the 3rd xy-plane
+SUBUNIT[4:5, 2:5, 3, 1] = empty //last 2 columns of the 3rd xy-plane
+SUBUNIT[2, 3:4, 3, 1] = empty //second column of the 3rd xy-plane
+SUBUNIT[3, 2, 3, 1] = empty //third column of the 3rd xy-plane
+SUBUNIT[3, 4:5, 3, 1] = empty //third column of the 3rd xy-plane
+SUBUNIT[3, 3, 3, 1] = not_empty //F-actin-ATP
+SUBUNIT[2, 2, 3, 1] = not_empty //F-actin-ADP
+SUBUNIT[1:5, 1:5, 1:2, 2] = not_F_actin_ATP //first 2 xy-planes empty
+SUBUNIT[1:5, 1:5, 4:5, 2] = not_F_actin_ATP //last 2 xy-planes empty
+SUBUNIT[1:5, 1, 3, 2] = not_F_actin_ATP //empty
+SUBUNIT[1:2, 2:5, 3, 2] = not_F_actin_ATP //empty
+SUBUNIT[4:5, 2:5, 3, 2] = not_F_actin_ATP //empty
+SUBUNIT[3, 2, 3, 2] = not_F_actin_ATP
+SUBUNIT[3, 4:5, 3, 2] = not_F_actin_ATP
+SUBUNIT[3, 3, 3, 2] = F_actin_ATP
+SUBUNIT[1:5, 1:5, 1:2, 3] = not_F_actin_ADP
+
+SUBUNIT[1:5, 1:5, 4:5, 3] = not_F_actin_ADP
+
+SUBUNIT[1:5, 1, 3, 3] = not_F_actin_ADP
+SUBUNIT[1, 2:5, 3, 3] = not_F_actin_ADP
+SUBUNIT[5, 3:5, 3, 3] = not_F_actin_ADP
+SUBUNIT[2, 3:4, 3, 3] = not_F_actin_ADP
+SUBUNIT[3, 2:5, 3, 3] = not_F_actin_ADP
+SUBUNIT[2, 2, 3, 3] = F_actin_ADP
+SUBUNIT[1:5, 1:5, 1:5, 4] = not_Arp23_A
+
+
+SHAPE {
+SUBUNIT[1, 1, 1, 1] = [0.000000, 0.000000, 0.000000]
+SUBUNIT[1, 1, 1, 2] = [0.000000, 0.000000, 0.000000]
+SUBUNIT[1, 1, 1, 3] = [0.000000, 0.000000, 0.000000]
+SUBUNIT[1, 1, 1, 4] = [0.000000, 0.000000, 0.000000]
+SUBUNIT[1, 1, 2, 1] = [0.000000, 0.000000, 0.005000]
+SUBUNIT[1, 1, 2, 2] = [0.000000, 0.000000, 0.005000]
+SUBUNIT[1, 1, 2, 3] = [0.000000, 0.000000, 0.005000]
+SUBUNIT[1, 1, 2, 4] = [0.000000, 0.000000, 0.005000]
+SUBUNIT[1, 1, 3, 1] = [0.000000, 0.000000, 0.010000]
+SUBUNIT[1, 1, 3, 2] = [0.000000, 0.000000, 0.010000]
+SUBUNIT[1, 1, 3, 3] = [0.000000, 0.000000, 0.010000]
+SUBUNIT[1, 1, 3, 4] = [0.000000, 0.000000, 0.010000]
+SUBUNIT[1, 1, 4, 1] = [0.000000, 0.000000, 0.015000]
+SUBUNIT[1, 1, 4, 2] = [0.000000, 0.000000, 0.015000]
+SUBUNIT[1, 1, 4, 3] = [0.000000, 0.000000, 0.015000]
+SUBUNIT[1, 1, 4, 4] = [0.000000, 0.000000, 0.015000]
+SUBUNIT[1, 1, 5, 1] = [0.000000, 0.000000, 0.020000]
+SUBUNIT[1, 1, 5, 2] = [0.000000, 0.000000, 0.020000]
+SUBUNIT[1, 1, 5, 3] = [0.000000, 0.000000, 0.020000]
+SUBUNIT[1, 1, 5, 4] = [0.000000, 0.000000, 0.020000]
+SUBUNIT[1, 2, 1, 1] = [0.000000, 0.005000, 0.000000]
+SUBUNIT[1, 2, 1, 2] = [0.000000, 0.005000, 0.000000]
+SUBUNIT[1, 2, 1, 3] = [0.000000, 0.005000, 0.000000]
+SUBUNIT[1, 2, 1, 4] = [0.000000, 0.005000, 0.000000]
+SUBUNIT[1, 2, 2, 1] = [0.000000, 0.005000, 0.005000]
+SUBUNIT[1, 2, 2, 2] = [0.000000, 0.005000, 0.005000]
+SUBUNIT[1, 2, 2, 3] = [0.000000, 0.005000, 0.005000]
+SUBUNIT[1, 2, 2, 4] = [0.000000, 0.005000, 0.005000]
+SUBUNIT[1, 2, 3, 1] = [0.000000, 0.005000, 0.010000]
+SUBUNIT[1, 2, 3, 2] = [0.000000, 0.005000, 0.010000]
+SUBUNIT[1, 2, 3, 3] = [0.000000, 0.005000, 0.010000]
+SUBUNIT[1, 2, 3, 4] = [0.000000, 0.005000, 0.010000]
+SUBUNIT[1, 2, 4, 1] = [0.000000, 0.005000, 0.015000]
+SUBUNIT[1, 2, 4, 2] = [0.000000, 0.005000, 0.015000]
+SUBUNIT[1, 2, 4, 3] = [0.000000, 0.005000, 0.015000]
+SUBUNIT[1, 2, 4, 4] = [0.000000, 0.005000, 0.015000]
+SUBUNIT[1, 2, 5, 1] = [0.000000, 0.005000, 0.020000]
+SUBUNIT[1, 2, 5, 2] = [0.000000, 0.005000, 0.020000]
+SUBUNIT[1, 2, 5, 3] = [0.000000, 0.005000, 0.020000]
+SUBUNIT[1, 2, 5, 4] = [0.000000, 0.005000, 0.020000]
+SUBUNIT[1, 3, 1, 1] = [0.000000, 0.010000, 0.000000]
+SUBUNIT[1, 3, 1, 2] = [0.000000, 0.010000, 0.000000]
+SUBUNIT[1, 3, 1, 3] = [0.000000, 0.010000, 0.000000]
+SUBUNIT[1, 3, 1, 4] = [0.000000, 0.010000, 0.000000]
+SUBUNIT[1, 3, 2, 1] = [0.000000, 0.010000, 0.005000]
+SUBUNIT[1, 3, 2, 2] = [0.000000, 0.010000, 0.005000]
+SUBUNIT[1, 3, 2, 3] = [0.000000, 0.010000, 0.005000]
+SUBUNIT[1, 3, 2, 4] = [0.000000, 0.010000, 0.005000]
+SUBUNIT[1, 3, 3, 1] = [0.000000, 0.010000, 0.010000]
+SUBUNIT[1, 3, 3, 2] = [0.000000, 0.010000, 0.010000]
+SUBUNIT[1, 3, 3, 3] = [0.000000, 0.010000, 0.010000]
+SUBUNIT[1, 3, 3, 4] = [0.000000, 0.010000, 0.010000]
+SUBUNIT[1, 3, 4, 1] = [0.000000, 0.010000, 0.015000]
+SUBUNIT[1, 3, 4, 2] = [0.000000, 0.010000, 0.015000]
+SUBUNIT[1, 3, 4, 3] = [0.000000, 0.010000, 0.015000]
+SUBUNIT[1, 3, 4, 4] = [0.000000, 0.010000, 0.015000]
+SUBUNIT[1, 3, 5, 1] = [0.000000, 0.010000, 0.020000]
+SUBUNIT[1, 3, 5, 2] = [0.000000, 0.010000, 0.020000]
+SUBUNIT[1, 3, 5, 3] = [0.000000, 0.010000, 0.020000]
+SUBUNIT[1, 3, 5, 4] = [0.000000, 0.010000, 0.020000]
+SUBUNIT[1, 4, 1, 1] = [0.000000, 0.015000, 0.000000]
+SUBUNIT[1, 4, 1, 2] = [0.000000, 0.015000, 0.000000]
+SUBUNIT[1, 4, 1, 3] = [0.000000, 0.015000, 0.000000]
+SUBUNIT[1, 4, 1, 4] = [0.000000, 0.015000, 0.000000]
+SUBUNIT[1, 4, 2, 1] = [0.000000, 0.015000, 0.005000]
+SUBUNIT[1, 4, 2, 2] = [0.000000, 0.015000, 0.005000]
+SUBUNIT[1, 4, 2, 3] = [0.000000, 0.015000, 0.005000]
+SUBUNIT[1, 4, 2, 4] = [0.000000, 0.015000, 0.005000]
+SUBUNIT[1, 4, 3, 1] = [0.000000, 0.015000, 0.010000]
+SUBUNIT[1, 4, 3, 2] = [0.000000, 0.015000, 0.010000]
+SUBUNIT[1, 4, 3, 3] = [0.000000, 0.015000, 0.010000]
+SUBUNIT[1, 4, 3, 4] = [0.000000, 0.015000, 0.010000]
+SUBUNIT[1, 4, 4, 1] = [0.000000, 0.015000, 0.015000]
+SUBUNIT[1, 4, 4, 2] = [0.000000, 0.015000, 0.015000]
+SUBUNIT[1, 4, 4, 3] = [0.000000, 0.015000, 0.015000]
+SUBUNIT[1, 4, 4, 4] = [0.000000, 0.015000, 0.015000]
+SUBUNIT[1, 4, 5, 1] = [0.000000, 0.015000, 0.020000]
+SUBUNIT[1, 4, 5, 2] = [0.000000, 0.015000, 0.020000]
+SUBUNIT[1, 4, 5, 3] = [0.000000, 0.015000, 0.020000]
+SUBUNIT[1, 4, 5, 4] = [0.000000, 0.015000, 0.020000]
+SUBUNIT[1, 5, 1, 1] = [0.000000, 0.020000, 0.000000]
+SUBUNIT[1, 5, 1, 2] = [0.000000, 0.020000, 0.000000]
+SUBUNIT[1, 5, 1, 3] = [0.000000, 0.020000, 0.000000]
+SUBUNIT[1, 5, 1, 4] = [0.000000, 0.020000, 0.000000]
+SUBUNIT[1, 5, 2, 1] = [0.000000, 0.020000, 0.005000]
+SUBUNIT[1, 5, 2, 2] = [0.000000, 0.020000, 0.005000]
+SUBUNIT[1, 5, 2, 3] = [0.000000, 0.020000, 0.005000]
+SUBUNIT[1, 5, 2, 4] = [0.000000, 0.020000, 0.005000]
+SUBUNIT[1, 5, 3, 1] = [0.000000, 0.020000, 0.010000]
+SUBUNIT[1, 5, 3, 2] = [0.000000, 0.020000, 0.010000]
+SUBUNIT[1, 5, 3, 3] = [0.000000, 0.020000, 0.010000]
+SUBUNIT[1, 5, 3, 4] = [0.000000, 0.020000, 0.010000]
+SUBUNIT[1, 5, 4, 1] = [0.000000, 0.020000, 0.015000]
+SUBUNIT[1, 5, 4, 2] = [0.000000, 0.020000, 0.015000]
+SUBUNIT[1, 5, 4, 3] = [0.000000, 0.020000, 0.015000]
+SUBUNIT[1, 5, 4, 4] = [0.000000, 0.020000, 0.015000]
+SUBUNIT[1, 5, 5, 1] = [0.000000, 0.020000, 0.020000]
+SUBUNIT[1, 5, 5, 2] = [0.000000, 0.020000, 0.020000]
+SUBUNIT[1, 5, 5, 3] = [0.000000, 0.020000, 0.020000]
+SUBUNIT[1, 5, 5, 4] = [0.000000, 0.020000, 0.020000]
+SUBUNIT[2, 1, 1, 1] = [0.005000, 0.000000, 0.000000]
+SUBUNIT[2, 1, 1, 2] = [0.005000, 0.000000, 0.000000]
+SUBUNIT[2, 1, 1, 3] = [0.005000, 0.000000, 0.000000]
+SUBUNIT[2, 1, 1, 4] = [0.005000, 0.000000, 0.000000]
+SUBUNIT[2, 1, 2, 1] = [0.005000, 0.000000, 0.005000]
+SUBUNIT[2, 1, 2, 2] = [0.005000, 0.000000, 0.005000]
+SUBUNIT[2, 1, 2, 3] = [0.005000, 0.000000, 0.005000]
+SUBUNIT[2, 1, 2, 4] = [0.005000, 0.000000, 0.005000]
+SUBUNIT[2, 1, 3, 1] = [0.005000, 0.000000, 0.010000]
+SUBUNIT[2, 1, 3, 2] = [0.005000, 0.000000, 0.010000]
+SUBUNIT[2, 1, 3, 3] = [0.005000, 0.000000, 0.010000]
+SUBUNIT[2, 1, 3, 4] = [0.005000, 0.000000, 0.010000]
+SUBUNIT[2, 1, 4, 1] = [0.005000, 0.000000, 0.015000]
+SUBUNIT[2, 1, 4, 2] = [0.005000, 0.000000, 0.015000]
+SUBUNIT[2, 1, 4, 3] = [0.005000, 0.000000, 0.015000]
+SUBUNIT[2, 1, 4, 4] = [0.005000, 0.000000, 0.015000]
+SUBUNIT[2, 1, 5, 1] = [0.005000, 0.000000, 0.020000]
+SUBUNIT[2, 1, 5, 2] = [0.005000, 0.000000, 0.020000]
+SUBUNIT[2, 1, 5, 3] = [0.005000, 0.000000, 0.020000]
+SUBUNIT[2, 1, 5, 4] = [0.005000, 0.000000, 0.020000]
+SUBUNIT[2, 2, 1, 1] = [0.005000, 0.005000, 0.000000]
+SUBUNIT[2, 2, 1, 2] = [0.005000, 0.005000, 0.000000]
+SUBUNIT[2, 2, 1, 3] = [0.005000, 0.005000, 0.000000]
+SUBUNIT[2, 2, 1, 4] = [0.005000, 0.005000, 0.000000]
+SUBUNIT[2, 2, 2, 1] = [0.005000, 0.005000, 0.005000]
+SUBUNIT[2, 2, 2, 2] = [0.005000, 0.005000, 0.005000]
+SUBUNIT[2, 2, 2, 3] = [0.005000, 0.005000, 0.005000]
+SUBUNIT[2, 2, 2, 4] = [0.005000, 0.005000, 0.005000]
+SUBUNIT[2, 2, 3, 1] = [0.005000, 0.005000, 0.010000]
+SUBUNIT[2, 2, 3, 2] = [0.005000, 0.005000, 0.010000]
+SUBUNIT[2, 2, 3, 3] = [0.005000, 0.005000, 0.010000]
+SUBUNIT[2, 2, 3, 4] = [0.005000, 0.005000, 0.010000]
+SUBUNIT[2, 2, 4, 1] = [0.005000, 0.005000, 0.015000]
+SUBUNIT[2, 2, 4, 2] = [0.005000, 0.005000, 0.015000]
+SUBUNIT[2, 2, 4, 3] = [0.005000, 0.005000, 0.015000]
+SUBUNIT[2, 2, 4, 4] = [0.005000, 0.005000, 0.015000]
+SUBUNIT[2, 2, 5, 1] = [0.005000, 0.005000, 0.020000]
+SUBUNIT[2, 2, 5, 2] = [0.005000, 0.005000, 0.020000]
+SUBUNIT[2, 2, 5, 3] = [0.005000, 0.005000, 0.020000]
+SUBUNIT[2, 2, 5, 4] = [0.005000, 0.005000, 0.020000]
+SUBUNIT[2, 3, 1, 1] = [0.005000, 0.010000, 0.000000]
+SUBUNIT[2, 3, 1, 2] = [0.005000, 0.010000, 0.000000]
+SUBUNIT[2, 3, 1, 3] = [0.005000, 0.010000, 0.000000]
+SUBUNIT[2, 3, 1, 4] = [0.005000, 0.010000, 0.000000]
+SUBUNIT[2, 3, 2, 1] = [0.005000, 0.010000, 0.005000]
+SUBUNIT[2, 3, 2, 2] = [0.005000, 0.010000, 0.005000]
+SUBUNIT[2, 3, 2, 3] = [0.005000, 0.010000, 0.005000]
+SUBUNIT[2, 3, 2, 4] = [0.005000, 0.010000, 0.005000]
+SUBUNIT[2, 3, 3, 1] = [0.005000, 0.010000, 0.010000]
+SUBUNIT[2, 3, 3, 2] = [0.005000, 0.010000, 0.010000]
+SUBUNIT[2, 3, 3, 3] = [0.005000, 0.010000, 0.010000]
+SUBUNIT[2, 3, 3, 4] = [0.005000, 0.010000, 0.010000]
+SUBUNIT[2, 3, 4, 1] = [0.005000, 0.010000, 0.015000]
+SUBUNIT[2, 3, 4, 2] = [0.005000, 0.010000, 0.015000]
+SUBUNIT[2, 3, 4, 3] = [0.005000, 0.010000, 0.015000]
+SUBUNIT[2, 3, 4, 4] = [0.005000, 0.010000, 0.015000]
+SUBUNIT[2, 3, 5, 1] = [0.005000, 0.010000, 0.020000]
+SUBUNIT[2, 3, 5, 2] = [0.005000, 0.010000, 0.020000]
+SUBUNIT[2, 3, 5, 3] = [0.005000, 0.010000, 0.020000]
+SUBUNIT[2, 3, 5, 4] = [0.005000, 0.010000, 0.020000]
+SUBUNIT[2, 4, 1, 1] = [0.005000, 0.015000, 0.000000]
+SUBUNIT[2, 4, 1, 2] = [0.005000, 0.015000, 0.000000]
+SUBUNIT[2, 4, 1, 3] = [0.005000, 0.015000, 0.000000]
+SUBUNIT[2, 4, 1, 4] = [0.005000, 0.015000, 0.000000]
+SUBUNIT[2, 4, 2, 1] = [0.005000, 0.015000, 0.005000]
+SUBUNIT[2, 4, 2, 2] = [0.005000, 0.015000, 0.005000]
+SUBUNIT[2, 4, 2, 3] = [0.005000, 0.015000, 0.005000]
+SUBUNIT[2, 4, 2, 4] = [0.005000, 0.015000, 0.005000]
+SUBUNIT[2, 4, 3, 1] = [0.005000, 0.015000, 0.010000]
+SUBUNIT[2, 4, 3, 2] = [0.005000, 0.015000, 0.010000]
+SUBUNIT[2, 4, 3, 3] = [0.005000, 0.015000, 0.010000]
+SUBUNIT[2, 4, 3, 4] = [0.005000, 0.015000, 0.010000]
+SUBUNIT[2, 4, 4, 1] = [0.005000, 0.015000, 0.015000]
+SUBUNIT[2, 4, 4, 2] = [0.005000, 0.015000, 0.015000]
+SUBUNIT[2, 4, 4, 3] = [0.005000, 0.015000, 0.015000]
+SUBUNIT[2, 4, 4, 4] = [0.005000, 0.015000, 0.015000]
+SUBUNIT[2, 4, 5, 1] = [0.005000, 0.015000, 0.020000]
+SUBUNIT[2, 4, 5, 2] = [0.005000, 0.015000, 0.020000]
+SUBUNIT[2, 4, 5, 3] = [0.005000, 0.015000, 0.020000]
+SUBUNIT[2, 4, 5, 4] = [0.005000, 0.015000, 0.020000]
+SUBUNIT[2, 5, 1, 1] = [0.005000, 0.020000, 0.000000]
+SUBUNIT[2, 5, 1, 2] = [0.005000, 0.020000, 0.000000]
+SUBUNIT[2, 5, 1, 3] = [0.005000, 0.020000, 0.000000]
+SUBUNIT[2, 5, 1, 4] = [0.005000, 0.020000, 0.000000]
+SUBUNIT[2, 5, 2, 1] = [0.005000, 0.020000, 0.005000]
+SUBUNIT[2, 5, 2, 2] = [0.005000, 0.020000, 0.005000]
+SUBUNIT[2, 5, 2, 3] = [0.005000, 0.020000, 0.005000]
+SUBUNIT[2, 5, 2, 4] = [0.005000, 0.020000, 0.005000]
+SUBUNIT[2, 5, 3, 1] = [0.005000, 0.020000, 0.010000]
+SUBUNIT[2, 5, 3, 2] = [0.005000, 0.020000, 0.010000]
+SUBUNIT[2, 5, 3, 3] = [0.005000, 0.020000, 0.010000]
+SUBUNIT[2, 5, 3, 4] = [0.005000, 0.020000, 0.010000]
+SUBUNIT[2, 5, 4, 1] = [0.005000, 0.020000, 0.015000]
+SUBUNIT[2, 5, 4, 2] = [0.005000, 0.020000, 0.015000]
+SUBUNIT[2, 5, 4, 3] = [0.005000, 0.020000, 0.015000]
+SUBUNIT[2, 5, 4, 4] = [0.005000, 0.020000, 0.015000]
+SUBUNIT[2, 5, 5, 1] = [0.005000, 0.020000, 0.020000]
+SUBUNIT[2, 5, 5, 2] = [0.005000, 0.020000, 0.020000]
+SUBUNIT[2, 5, 5, 3] = [0.005000, 0.020000, 0.020000]
+SUBUNIT[2, 5, 5, 4] = [0.005000, 0.020000, 0.020000]
+SUBUNIT[3, 1, 1, 1] = [0.010000, 0.000000, 0.000000]
+SUBUNIT[3, 1, 1, 2] = [0.010000, 0.000000, 0.000000]
+SUBUNIT[3, 1, 1, 3] = [0.010000, 0.000000, 0.000000]
+SUBUNIT[3, 1, 1, 4] = [0.010000, 0.000000, 0.000000]
+SUBUNIT[3, 1, 2, 1] = [0.010000, 0.000000, 0.005000]
+SUBUNIT[3, 1, 2, 2] = [0.010000, 0.000000, 0.005000]
+SUBUNIT[3, 1, 2, 3] = [0.010000, 0.000000, 0.005000]
+SUBUNIT[3, 1, 2, 4] = [0.010000, 0.000000, 0.005000]
+SUBUNIT[3, 1, 3, 1] = [0.010000, 0.000000, 0.010000]
+SUBUNIT[3, 1, 3, 2] = [0.010000, 0.000000, 0.010000]
+SUBUNIT[3, 1, 3, 3] = [0.010000, 0.000000, 0.010000]
+SUBUNIT[3, 1, 3, 4] = [0.010000, 0.000000, 0.010000]
+SUBUNIT[3, 1, 4, 1] = [0.010000, 0.000000, 0.015000]
+SUBUNIT[3, 1, 4, 2] = [0.010000, 0.000000, 0.015000]
+SUBUNIT[3, 1, 4, 3] = [0.010000, 0.000000, 0.015000]
+SUBUNIT[3, 1, 4, 4] = [0.010000, 0.000000, 0.015000]
+SUBUNIT[3, 1, 5, 1] = [0.010000, 0.000000, 0.020000]
+SUBUNIT[3, 1, 5, 2] = [0.010000, 0.000000, 0.020000]
+SUBUNIT[3, 1, 5, 3] = [0.010000, 0.000000, 0.020000]
+SUBUNIT[3, 1, 5, 4] = [0.010000, 0.000000, 0.020000]
+SUBUNIT[3, 2, 1, 1] = [0.010000, 0.005000, 0.000000]
+SUBUNIT[3, 2, 1, 2] = [0.010000, 0.005000, 0.000000]
+SUBUNIT[3, 2, 1, 3] = [0.010000, 0.005000, 0.000000]
+SUBUNIT[3, 2, 1, 4] = [0.010000, 0.005000, 0.000000]
+SUBUNIT[3, 2, 2, 1] = [0.010000, 0.005000, 0.005000]
+SUBUNIT[3, 2, 2, 2] = [0.010000, 0.005000, 0.005000]
+SUBUNIT[3, 2, 2, 3] = [0.010000, 0.005000, 0.005000]
+SUBUNIT[3, 2, 2, 4] = [0.010000, 0.005000, 0.005000]
+SUBUNIT[3, 2, 3, 1] = [0.010000, 0.005000, 0.010000]
+SUBUNIT[3, 2, 3, 2] = [0.010000, 0.005000, 0.010000]
+SUBUNIT[3, 2, 3, 3] = [0.010000, 0.005000, 0.010000]
+SUBUNIT[3, 2, 3, 4] = [0.010000, 0.005000, 0.010000]
+SUBUNIT[3, 2, 4, 1] = [0.010000, 0.005000, 0.015000]
+SUBUNIT[3, 2, 4, 2] = [0.010000, 0.005000, 0.015000]
+SUBUNIT[3, 2, 4, 3] = [0.010000, 0.005000, 0.015000]
+SUBUNIT[3, 2, 4, 4] = [0.010000, 0.005000, 0.015000]
+SUBUNIT[3, 2, 5, 1] = [0.010000, 0.005000, 0.020000]
+SUBUNIT[3, 2, 5, 2] = [0.010000, 0.005000, 0.020000]
+SUBUNIT[3, 2, 5, 3] = [0.010000, 0.005000, 0.020000]
+SUBUNIT[3, 2, 5, 4] = [0.010000, 0.005000, 0.020000]
+SUBUNIT[3, 3, 1, 1] = [0.010000, 0.010000, 0.000000]
+SUBUNIT[3, 3, 1, 2] = [0.010000, 0.010000, 0.000000]
+SUBUNIT[3, 3, 1, 3] = [0.010000, 0.010000, 0.000000]
+SUBUNIT[3, 3, 1, 4] = [0.010000, 0.010000, 0.000000]
+SUBUNIT[3, 3, 2, 1] = [0.010000, 0.010000, 0.005000]
+SUBUNIT[3, 3, 2, 2] = [0.010000, 0.010000, 0.005000]
+SUBUNIT[3, 3, 2, 3] = [0.010000, 0.010000, 0.005000]
+SUBUNIT[3, 3, 2, 4] = [0.010000, 0.010000, 0.005000]
+SUBUNIT[3, 3, 3, 1] = [0.010000, 0.010000, 0.010000]
+SUBUNIT[3, 3, 3, 2] = [0.010000, 0.010000, 0.010000]
+SUBUNIT[3, 3, 3, 3] = [0.010000, 0.010000, 0.010000]
+SUBUNIT[3, 3, 3, 4] = [0.010000, 0.010000, 0.010000]
+SUBUNIT[3, 3, 4, 1] = [0.010000, 0.010000, 0.015000]
+SUBUNIT[3, 3, 4, 2] = [0.010000, 0.010000, 0.015000]
+SUBUNIT[3, 3, 4, 3] = [0.010000, 0.010000, 0.015000]
+SUBUNIT[3, 3, 4, 4] = [0.010000, 0.010000, 0.015000]
+SUBUNIT[3, 3, 5, 1] = [0.010000, 0.010000, 0.020000]
+SUBUNIT[3, 3, 5, 2] = [0.010000, 0.010000, 0.020000]
+SUBUNIT[3, 3, 5, 3] = [0.010000, 0.010000, 0.020000]
+SUBUNIT[3, 3, 5, 4] = [0.010000, 0.010000, 0.020000]
+SUBUNIT[3, 4, 1, 1] = [0.010000, 0.015000, 0.000000]
+SUBUNIT[3, 4, 1, 2] = [0.010000, 0.015000, 0.000000]
+SUBUNIT[3, 4, 1, 3] = [0.010000, 0.015000, 0.000000]
+SUBUNIT[3, 4, 1, 4] = [0.010000, 0.015000, 0.000000]
+SUBUNIT[3, 4, 2, 1] = [0.010000, 0.015000, 0.005000]
+SUBUNIT[3, 4, 2, 2] = [0.010000, 0.015000, 0.005000]
+SUBUNIT[3, 4, 2, 3] = [0.010000, 0.015000, 0.005000]
+SUBUNIT[3, 4, 2, 4] = [0.010000, 0.015000, 0.005000]
+SUBUNIT[3, 4, 3, 1] = [0.010000, 0.015000, 0.010000]
+SUBUNIT[3, 4, 3, 2] = [0.010000, 0.015000, 0.010000]
+SUBUNIT[3, 4, 3, 3] = [0.010000, 0.015000, 0.010000]
+SUBUNIT[3, 4, 3, 4] = [0.010000, 0.015000, 0.010000]
+SUBUNIT[3, 4, 4, 1] = [0.010000, 0.015000, 0.015000]
+SUBUNIT[3, 4, 4, 2] = [0.010000, 0.015000, 0.015000]
+SUBUNIT[3, 4, 4, 3] = [0.010000, 0.015000, 0.015000]
+SUBUNIT[3, 4, 4, 4] = [0.010000, 0.015000, 0.015000]
+SUBUNIT[3, 4, 5, 1] = [0.010000, 0.015000, 0.020000]
+SUBUNIT[3, 4, 5, 2] = [0.010000, 0.015000, 0.020000]
+SUBUNIT[3, 4, 5, 3] = [0.010000, 0.015000, 0.020000]
+SUBUNIT[3, 4, 5, 4] = [0.010000, 0.015000, 0.020000]
+SUBUNIT[3, 5, 1, 1] = [0.010000, 0.020000, 0.000000]
+SUBUNIT[3, 5, 1, 2] = [0.010000, 0.020000, 0.000000]
+SUBUNIT[3, 5, 1, 3] = [0.010000, 0.020000, 0.000000]
+SUBUNIT[3, 5, 1, 4] = [0.010000, 0.020000, 0.000000]
+SUBUNIT[3, 5, 2, 1] = [0.010000, 0.020000, 0.005000]
+SUBUNIT[3, 5, 2, 2] = [0.010000, 0.020000, 0.005000]
+SUBUNIT[3, 5, 2, 3] = [0.010000, 0.020000, 0.005000]
+SUBUNIT[3, 5, 2, 4] = [0.010000, 0.020000, 0.005000]
+SUBUNIT[3, 5, 3, 1] = [0.010000, 0.020000, 0.010000]
+SUBUNIT[3, 5, 3, 2] = [0.010000, 0.020000, 0.010000]
+SUBUNIT[3, 5, 3, 3] = [0.010000, 0.020000, 0.010000]
+SUBUNIT[3, 5, 3, 4] = [0.010000, 0.020000, 0.010000]
+SUBUNIT[3, 5, 4, 1] = [0.010000, 0.020000, 0.015000]
+SUBUNIT[3, 5, 4, 2] = [0.010000, 0.020000, 0.015000]
+SUBUNIT[3, 5, 4, 3] = [0.010000, 0.020000, 0.015000]
+SUBUNIT[3, 5, 4, 4] = [0.010000, 0.020000, 0.015000]
+SUBUNIT[3, 5, 5, 1] = [0.010000, 0.020000, 0.020000]
+SUBUNIT[3, 5, 5, 2] = [0.010000, 0.020000, 0.020000]
+SUBUNIT[3, 5, 5, 3] = [0.010000, 0.020000, 0.020000]
+SUBUNIT[3, 5, 5, 4] = [0.010000, 0.020000, 0.020000]
+SUBUNIT[4, 1, 1, 1] = [0.015000, 0.000000, 0.000000]
+SUBUNIT[4, 1, 1, 2] = [0.015000, 0.000000, 0.000000]
+SUBUNIT[4, 1, 1, 3] = [0.015000, 0.000000, 0.000000]
+SUBUNIT[4, 1, 1, 4] = [0.015000, 0.000000, 0.000000]
+SUBUNIT[4, 1, 2, 1] = [0.015000, 0.000000, 0.005000]
+SUBUNIT[4, 1, 2, 2] = [0.015000, 0.000000, 0.005000]
+SUBUNIT[4, 1, 2, 3] = [0.015000, 0.000000, 0.005000]
+SUBUNIT[4, 1, 2, 4] = [0.015000, 0.000000, 0.005000]
+SUBUNIT[4, 1, 3, 1] = [0.015000, 0.000000, 0.010000]
+SUBUNIT[4, 1, 3, 2] = [0.015000, 0.000000, 0.010000]
+SUBUNIT[4, 1, 3, 3] = [0.015000, 0.000000, 0.010000]
+SUBUNIT[4, 1, 3, 4] = [0.015000, 0.000000, 0.010000]
+SUBUNIT[4, 1, 4, 1] = [0.015000, 0.000000, 0.015000]
+SUBUNIT[4, 1, 4, 2] = [0.015000, 0.000000, 0.015000]
+SUBUNIT[4, 1, 4, 3] = [0.015000, 0.000000, 0.015000]
+SUBUNIT[4, 1, 4, 4] = [0.015000, 0.000000, 0.015000]
+SUBUNIT[4, 1, 5, 1] = [0.015000, 0.000000, 0.020000]
+SUBUNIT[4, 1, 5, 2] = [0.015000, 0.000000, 0.020000]
+SUBUNIT[4, 1, 5, 3] = [0.015000, 0.000000, 0.020000]
+SUBUNIT[4, 1, 5, 4] = [0.015000, 0.000000, 0.020000]
+SUBUNIT[4, 2, 1, 1] = [0.015000, 0.005000, 0.000000]
+SUBUNIT[4, 2, 1, 2] = [0.015000, 0.005000, 0.000000]
+SUBUNIT[4, 2, 1, 3] = [0.015000, 0.005000, 0.000000]
+SUBUNIT[4, 2, 1, 4] = [0.015000, 0.005000, 0.000000]
+SUBUNIT[4, 2, 2, 1] = [0.015000, 0.005000, 0.005000]
+SUBUNIT[4, 2, 2, 2] = [0.015000, 0.005000, 0.005000]
+SUBUNIT[4, 2, 2, 3] = [0.015000, 0.005000, 0.005000]
+SUBUNIT[4, 2, 2, 4] = [0.015000, 0.005000, 0.005000]
+SUBUNIT[4, 2, 3, 1] = [0.015000, 0.005000, 0.010000]
+SUBUNIT[4, 2, 3, 2] = [0.015000, 0.005000, 0.010000]
+SUBUNIT[4, 2, 3, 3] = [0.015000, 0.005000, 0.010000]
+SUBUNIT[4, 2, 3, 4] = [0.015000, 0.005000, 0.010000]
+SUBUNIT[4, 2, 4, 1] = [0.015000, 0.005000, 0.015000]
+SUBUNIT[4, 2, 4, 2] = [0.015000, 0.005000, 0.015000]
+SUBUNIT[4, 2, 4, 3] = [0.015000, 0.005000, 0.015000]
+SUBUNIT[4, 2, 4, 4] = [0.015000, 0.005000, 0.015000]
+SUBUNIT[4, 2, 5, 1] = [0.015000, 0.005000, 0.020000]
+SUBUNIT[4, 2, 5, 2] = [0.015000, 0.005000, 0.020000]
+SUBUNIT[4, 2, 5, 3] = [0.015000, 0.005000, 0.020000]
+SUBUNIT[4, 2, 5, 4] = [0.015000, 0.005000, 0.020000]
+SUBUNIT[4, 3, 1, 1] = [0.015000, 0.010000, 0.000000]
+SUBUNIT[4, 3, 1, 2] = [0.015000, 0.010000, 0.000000]
+SUBUNIT[4, 3, 1, 3] = [0.015000, 0.010000, 0.000000]
+SUBUNIT[4, 3, 1, 4] = [0.015000, 0.010000, 0.000000]
+SUBUNIT[4, 3, 2, 1] = [0.015000, 0.010000, 0.005000]
+SUBUNIT[4, 3, 2, 2] = [0.015000, 0.010000, 0.005000]
+SUBUNIT[4, 3, 2, 3] = [0.015000, 0.010000, 0.005000]
+SUBUNIT[4, 3, 2, 4] = [0.015000, 0.010000, 0.005000]
+SUBUNIT[4, 3, 3, 1] = [0.015000, 0.010000, 0.010000]
+SUBUNIT[4, 3, 3, 2] = [0.015000, 0.010000, 0.010000]
+SUBUNIT[4, 3, 3, 3] = [0.015000, 0.010000, 0.010000]
+SUBUNIT[4, 3, 3, 4] = [0.015000, 0.010000, 0.010000]
+SUBUNIT[4, 3, 4, 1] = [0.015000, 0.010000, 0.015000]
+SUBUNIT[4, 3, 4, 2] = [0.015000, 0.010000, 0.015000]
+SUBUNIT[4, 3, 4, 3] = [0.015000, 0.010000, 0.015000]
+SUBUNIT[4, 3, 4, 4] = [0.015000, 0.010000, 0.015000]
+SUBUNIT[4, 3, 5, 1] = [0.015000, 0.010000, 0.020000]
+SUBUNIT[4, 3, 5, 2] = [0.015000, 0.010000, 0.020000]
+SUBUNIT[4, 3, 5, 3] = [0.015000, 0.010000, 0.020000]
+SUBUNIT[4, 3, 5, 4] = [0.015000, 0.010000, 0.020000]
+SUBUNIT[4, 4, 1, 1] = [0.015000, 0.015000, 0.000000]
+SUBUNIT[4, 4, 1, 2] = [0.015000, 0.015000, 0.000000]
+SUBUNIT[4, 4, 1, 3] = [0.015000, 0.015000, 0.000000]
+SUBUNIT[4, 4, 1, 4] = [0.015000, 0.015000, 0.000000]
+SUBUNIT[4, 4, 2, 1] = [0.015000, 0.015000, 0.005000]
+SUBUNIT[4, 4, 2, 2] = [0.015000, 0.015000, 0.005000]
+SUBUNIT[4, 4, 2, 3] = [0.015000, 0.015000, 0.005000]
+SUBUNIT[4, 4, 2, 4] = [0.015000, 0.015000, 0.005000]
+SUBUNIT[4, 4, 3, 1] = [0.015000, 0.015000, 0.010000]
+SUBUNIT[4, 4, 3, 2] = [0.015000, 0.015000, 0.010000]
+SUBUNIT[4, 4, 3, 3] = [0.015000, 0.015000, 0.010000]
+SUBUNIT[4, 4, 3, 4] = [0.015000, 0.015000, 0.010000]
+SUBUNIT[4, 4, 4, 1] = [0.015000, 0.015000, 0.015000]
+SUBUNIT[4, 4, 4, 2] = [0.015000, 0.015000, 0.015000]
+SUBUNIT[4, 4, 4, 3] = [0.015000, 0.015000, 0.015000]
+SUBUNIT[4, 4, 4, 4] = [0.015000, 0.015000, 0.015000]
+SUBUNIT[4, 4, 5, 1] = [0.015000, 0.015000, 0.020000]
+SUBUNIT[4, 4, 5, 2] = [0.015000, 0.015000, 0.020000]
+SUBUNIT[4, 4, 5, 3] = [0.015000, 0.015000, 0.020000]
+SUBUNIT[4, 4, 5, 4] = [0.015000, 0.015000, 0.020000]
+SUBUNIT[4, 5, 1, 1] = [0.015000, 0.020000, 0.000000]
+SUBUNIT[4, 5, 1, 2] = [0.015000, 0.020000, 0.000000]
+SUBUNIT[4, 5, 1, 3] = [0.015000, 0.020000, 0.000000]
+SUBUNIT[4, 5, 1, 4] = [0.015000, 0.020000, 0.000000]
+SUBUNIT[4, 5, 2, 1] = [0.015000, 0.020000, 0.005000]
+SUBUNIT[4, 5, 2, 2] = [0.015000, 0.020000, 0.005000]
+SUBUNIT[4, 5, 2, 3] = [0.015000, 0.020000, 0.005000]
+SUBUNIT[4, 5, 2, 4] = [0.015000, 0.020000, 0.005000]
+SUBUNIT[4, 5, 3, 1] = [0.015000, 0.020000, 0.010000]
+SUBUNIT[4, 5, 3, 2] = [0.015000, 0.020000, 0.010000]
+SUBUNIT[4, 5, 3, 3] = [0.015000, 0.020000, 0.010000]
+SUBUNIT[4, 5, 3, 4] = [0.015000, 0.020000, 0.010000]
+SUBUNIT[4, 5, 4, 1] = [0.015000, 0.020000, 0.015000]
+SUBUNIT[4, 5, 4, 2] = [0.015000, 0.020000, 0.015000]
+SUBUNIT[4, 5, 4, 3] = [0.015000, 0.020000, 0.015000]
+SUBUNIT[4, 5, 4, 4] = [0.015000, 0.020000, 0.015000]
+SUBUNIT[4, 5, 5, 1] = [0.015000, 0.020000, 0.020000]
+SUBUNIT[4, 5, 5, 2] = [0.015000, 0.020000, 0.020000]
+SUBUNIT[4, 5, 5, 3] = [0.015000, 0.020000, 0.020000]
+SUBUNIT[4, 5, 5, 4] = [0.015000, 0.020000, 0.020000]
+SUBUNIT[5, 1, 1, 1] = [0.020000, 0.000000, 0.000000]
+SUBUNIT[5, 1, 1, 2] = [0.020000, 0.000000, 0.000000]
+SUBUNIT[5, 1, 1, 3] = [0.020000, 0.000000, 0.000000]
+SUBUNIT[5, 1, 1, 4] = [0.020000, 0.000000, 0.000000]
+SUBUNIT[5, 1, 2, 1] = [0.020000, 0.000000, 0.005000]
+SUBUNIT[5, 1, 2, 2] = [0.020000, 0.000000, 0.005000]
+SUBUNIT[5, 1, 2, 3] = [0.020000, 0.000000, 0.005000]
+SUBUNIT[5, 1, 2, 4] = [0.020000, 0.000000, 0.005000]
+SUBUNIT[5, 1, 3, 1] = [0.020000, 0.000000, 0.010000]
+SUBUNIT[5, 1, 3, 2] = [0.020000, 0.000000, 0.010000]
+SUBUNIT[5, 1, 3, 3] = [0.020000, 0.000000, 0.010000]
+SUBUNIT[5, 1, 3, 4] = [0.020000, 0.000000, 0.010000]
+SUBUNIT[5, 1, 4, 1] = [0.020000, 0.000000, 0.015000]
+SUBUNIT[5, 1, 4, 2] = [0.020000, 0.000000, 0.015000]
+SUBUNIT[5, 1, 4, 3] = [0.020000, 0.000000, 0.015000]
+SUBUNIT[5, 1, 4, 4] = [0.020000, 0.000000, 0.015000]
+SUBUNIT[5, 1, 5, 1] = [0.020000, 0.000000, 0.020000]
+SUBUNIT[5, 1, 5, 2] = [0.020000, 0.000000, 0.020000]
+SUBUNIT[5, 1, 5, 3] = [0.020000, 0.000000, 0.020000]
+SUBUNIT[5, 1, 5, 4] = [0.020000, 0.000000, 0.020000]
+SUBUNIT[5, 2, 1, 1] = [0.020000, 0.005000, 0.000000]
+SUBUNIT[5, 2, 1, 2] = [0.020000, 0.005000, 0.000000]
+SUBUNIT[5, 2, 1, 3] = [0.020000, 0.005000, 0.000000]
+SUBUNIT[5, 2, 1, 4] = [0.020000, 0.005000, 0.000000]
+SUBUNIT[5, 2, 2, 1] = [0.020000, 0.005000, 0.005000]
+SUBUNIT[5, 2, 2, 2] = [0.020000, 0.005000, 0.005000]
+SUBUNIT[5, 2, 2, 3] = [0.020000, 0.005000, 0.005000]
+SUBUNIT[5, 2, 2, 4] = [0.020000, 0.005000, 0.005000]
+SUBUNIT[5, 2, 3, 1] = [0.020000, 0.005000, 0.010000]
+SUBUNIT[5, 2, 3, 2] = [0.020000, 0.005000, 0.010000]
+SUBUNIT[5, 2, 3, 3] = [0.020000, 0.005000, 0.010000]
+SUBUNIT[5, 2, 3, 4] = [0.020000, 0.005000, 0.010000]
+SUBUNIT[5, 2, 4, 1] = [0.020000, 0.005000, 0.015000]
+SUBUNIT[5, 2, 4, 2] = [0.020000, 0.005000, 0.015000]
+SUBUNIT[5, 2, 4, 3] = [0.020000, 0.005000, 0.015000]
+SUBUNIT[5, 2, 4, 4] = [0.020000, 0.005000, 0.015000]
+SUBUNIT[5, 2, 5, 1] = [0.020000, 0.005000, 0.020000]
+SUBUNIT[5, 2, 5, 2] = [0.020000, 0.005000, 0.020000]
+SUBUNIT[5, 2, 5, 3] = [0.020000, 0.005000, 0.020000]
+SUBUNIT[5, 2, 5, 4] = [0.020000, 0.005000, 0.020000]
+SUBUNIT[5, 3, 1, 1] = [0.020000, 0.010000, 0.000000]
+SUBUNIT[5, 3, 1, 2] = [0.020000, 0.010000, 0.000000]
+SUBUNIT[5, 3, 1, 3] = [0.020000, 0.010000, 0.000000]
+SUBUNIT[5, 3, 1, 4] = [0.020000, 0.010000, 0.000000]
+SUBUNIT[5, 3, 2, 1] = [0.020000, 0.010000, 0.005000]
+SUBUNIT[5, 3, 2, 2] = [0.020000, 0.010000, 0.005000]
+SUBUNIT[5, 3, 2, 3] = [0.020000, 0.010000, 0.005000]
+SUBUNIT[5, 3, 2, 4] = [0.020000, 0.010000, 0.005000]
+SUBUNIT[5, 3, 3, 1] = [0.020000, 0.010000, 0.010000]
+SUBUNIT[5, 3, 3, 2] = [0.020000, 0.010000, 0.010000]
+SUBUNIT[5, 3, 3, 3] = [0.020000, 0.010000, 0.010000]
+SUBUNIT[5, 3, 3, 4] = [0.020000, 0.010000, 0.010000]
+SUBUNIT[5, 3, 4, 1] = [0.020000, 0.010000, 0.015000]
+SUBUNIT[5, 3, 4, 2] = [0.020000, 0.010000, 0.015000]
+SUBUNIT[5, 3, 4, 3] = [0.020000, 0.010000, 0.015000]
+SUBUNIT[5, 3, 4, 4] = [0.020000, 0.010000, 0.015000]
+SUBUNIT[5, 3, 5, 1] = [0.020000, 0.010000, 0.020000]
+SUBUNIT[5, 3, 5, 2] = [0.020000, 0.010000, 0.020000]
+SUBUNIT[5, 3, 5, 3] = [0.020000, 0.010000, 0.020000]
+SUBUNIT[5, 3, 5, 4] = [0.020000, 0.010000, 0.020000]
+SUBUNIT[5, 4, 1, 1] = [0.020000, 0.015000, 0.000000]
+SUBUNIT[5, 4, 1, 2] = [0.020000, 0.015000, 0.000000]
+SUBUNIT[5, 4, 1, 3] = [0.020000, 0.015000, 0.000000]
+SUBUNIT[5, 4, 1, 4] = [0.020000, 0.015000, 0.000000]
+SUBUNIT[5, 4, 2, 1] = [0.020000, 0.015000, 0.005000]
+SUBUNIT[5, 4, 2, 2] = [0.020000, 0.015000, 0.005000]
+SUBUNIT[5, 4, 2, 3] = [0.020000, 0.015000, 0.005000]
+SUBUNIT[5, 4, 2, 4] = [0.020000, 0.015000, 0.005000]
+SUBUNIT[5, 4, 3, 1] = [0.020000, 0.015000, 0.010000]
+SUBUNIT[5, 4, 3, 2] = [0.020000, 0.015000, 0.010000]
+SUBUNIT[5, 4, 3, 3] = [0.020000, 0.015000, 0.010000]
+SUBUNIT[5, 4, 3, 4] = [0.020000, 0.015000, 0.010000]
+SUBUNIT[5, 4, 4, 1] = [0.020000, 0.015000, 0.015000]
+SUBUNIT[5, 4, 4, 2] = [0.020000, 0.015000, 0.015000]
+SUBUNIT[5, 4, 4, 3] = [0.020000, 0.015000, 0.015000]
+SUBUNIT[5, 4, 4, 4] = [0.020000, 0.015000, 0.015000]
+SUBUNIT[5, 4, 5, 1] = [0.020000, 0.015000, 0.020000]
+SUBUNIT[5, 4, 5, 2] = [0.020000, 0.015000, 0.020000]
+SUBUNIT[5, 4, 5, 3] = [0.020000, 0.015000, 0.020000]
+SUBUNIT[5, 4, 5, 4] = [0.020000, 0.015000, 0.020000]
+SUBUNIT[5, 5, 1, 1] = [0.020000, 0.020000, 0.000000]
+SUBUNIT[5, 5, 1, 2] = [0.020000, 0.020000, 0.000000]
+SUBUNIT[5, 5, 1, 3] = [0.020000, 0.020000, 0.000000]
+SUBUNIT[5, 5, 1, 4] = [0.020000, 0.020000, 0.000000]
+SUBUNIT[5, 5, 2, 1] = [0.020000, 0.020000, 0.005000]
+SUBUNIT[5, 5, 2, 2] = [0.020000, 0.020000, 0.005000]
+SUBUNIT[5, 5, 2, 3] = [0.020000, 0.020000, 0.005000]
+SUBUNIT[5, 5, 2, 4] = [0.020000, 0.020000, 0.005000]
+SUBUNIT[5, 5, 3, 1] = [0.020000, 0.020000, 0.010000]
+SUBUNIT[5, 5, 3, 2] = [0.020000, 0.020000, 0.010000]
+SUBUNIT[5, 5, 3, 3] = [0.020000, 0.020000, 0.010000]
+SUBUNIT[5, 5, 3, 4] = [0.020000, 0.020000, 0.010000]
+SUBUNIT[5, 5, 4, 1] = [0.020000, 0.020000, 0.015000]
+SUBUNIT[5, 5, 4, 2] = [0.020000, 0.020000, 0.015000]
+SUBUNIT[5, 5, 4, 3] = [0.020000, 0.020000, 0.015000]
+SUBUNIT[5, 5, 4, 4] = [0.020000, 0.020000, 0.015000]
+SUBUNIT[5, 5, 5, 1] = [0.020000, 0.020000, 0.020000]
+SUBUNIT[5, 5, 5, 2] = [0.020000, 0.020000, 0.020000]
+SUBUNIT[5, 5, 5, 3] = [0.020000, 0.020000, 0.020000]
+SUBUNIT[5, 5, 5, 4] = [0.020000, 0.020000, 0.020000]
+}
+  
+  SUBUNIT_RELATIONSHIPS {
+           previous_x_y_z = [-1, -1, -1, 0] //immediate neighbours
+	   previous_y_z = [0, -1, -1, 0]
+	   next_x_previous_y_z = [+1, -1, -1, 0]
+	   previous_x_y = [-1, -1, 0, 0]
+	   previous_x = [-1, 0, 0, 0]
+	   next_x_previous_y = [+1, -1, 0, 0]
+	   previous_x_y_next_z = [-1, -1, +1, 0]
+	   next_z_previous_y = [0, -1, +1, 0]
+	   previous_y = [0, -1, 0, 0]
+	   next_x_z_previous_y = [+1, -1, +1, 0]
+	   previous_x_z = [-1, 0, -1, 0]
+	   previous_z = [0, 0, -1, 0]
+	   next_x_previous_z = [+1, 0, -1, 0]
+	   next_x = [+1, 0, 0, 0]
+	   previous_x_next_z = [-1, 0, +1, 0]
+	   next_z = [0, 0, +1, 0]
+	   next_x_z = [+1, 0, +1, 0]
+	   next_y_previous_x_z = [-1, +1, -1, 0]
+	   next_y_previous_z = [0, +1, -1, 0]
+	   next_x_y_previous_z = [+1, +1, -1, 0]
+	   next_y_previous_x = [-1, +1, 0, 0]
+	   next_y = [0, +1, 0, 0]
+	   next_x_y = [+1, +1, 0, 0]
+	   previous_x_next_y_z = [-1, +1, +1, 0]
+	   next_y_z = [0, +1, +1, 0]
+	   next_x_y_z = [+1, +1, +1, 0]
+
+	   previous_x_y_2 = [-2, -2, 0, 0] //location shift by 2
+	   next_x_previous_y_2 = [+2, -2, 0, 0]
+	   previous_y_z_2 = [0, -2, -2, 0]
+	   next_z_previous_y_2 = [0, -2, +2, 0]
+        }
+
+  RATE_RULES  {
+            F_actin_ATP_to_ADP_conversion  {
+	      
+	      next_x_y == F_actin_ATP & //ATP&ATP
+	      previous_x_y == F_actin_ATP : slow_ATP_to_ADP
+
+	      next_y_z == F_actin_ATP &
+	      previous_y_z == F_actin_ATP : slow_ATP_to_ADP
+
+	      next_y_previous_x == F_actin_ATP &
+	      next_x_previous_y == F_actin_ATP : slow_ATP_to_ADP
+
+	      next_y_previous_z == F_actin_ATP &
+	      next_z_previous_y == F_actin_ATP : slow_ATP_to_ADP
+
+	      next_x_y == F_actin_ADP & //ADP&ADP
+	      previous_x_y == F_actin_ADP : fast_ATP_to_ADP
+
+	      next_y_z == F_actin_ADP &
+	      previous_y_z == F_actin_ADP : fast_ATP_to_ADP
+
+	      next_y_previous_x == F_actin_ADP &
+	      next_x_previous_y == F_actin_ADP : fast_ATP_to_ADP
+
+	      next_y_previous_z == F_actin_ADP &
+	      next_z_previous_y == F_actin_ADP : fast_ATP_to_ADP
+
+	      next_x_y == F_actin_ATP & //ATP&ADP
+	      previous_x_y == F_actin_ADP : medium_ATP_to_ADP
+
+	      next_y_z == F_actin_ATP &
+	      previous_y_z == F_actin_ADP : medium_ATP_to_ADP
+
+	      next_y_previous_x == F_actin_ATP &
+	      next_x_previous_y == F_actin_ADP : medium_ATP_to_ADP
+
+	      next_y_previous_z == F_actin_ATP &
+	      next_z_previous_y == F_actin_ADP : medium_ATP_to_ADP
+
+	      next_x_y == F_actin_ADP & //ADP&ATP
+	      previous_x_y == F_actin_ATP : medium_ATP_to_ADP
+
+	      next_y_z == F_actin_ADP &
+	      previous_y_z == F_actin_ATP : medium_ATP_to_ADP
+
+	      next_y_previous_x == F_actin_ADP &
+	      next_x_previous_y == F_actin_ATP : medium_ATP_to_ADP
+
+	      next_y_previous_z == F_actin_ADP &
+	      next_z_previous_y == F_actin_ATP : medium_ATP_to_ADP
+		
+	      DEFAULT : 0
+		}
+	    
+	     filament_extension_minus_x {
+
+	       next_x_previous_y == F_actin_ATP &
+	       next_x_previous_y_2 == F_actin_ATP : filament_extension
+		 
+	       next_x_previous_y == F_actin_ATP &
+	       next_x_previous_y_2 == F_actin_ADP : filament_extension
+
+	       next_x_previous_y == F_actin_ADP &
+	       next_x_previous_y_2 == F_actin_ATP : filament_extension
+
+	       next_x_previous_y == F_actin_ADP &
+	       next_x_previous_y_2 == F_actin_ADP : filament_extension
+	       
+	       DEFAULT : 0
+	       }
+
+	     filament_extension_plus_x {
+
+	       previous_x_y == F_actin_ATP &
+	       previous_x_y_2 == F_actin_ATP : filament_extension
+		 
+	       previous_x_y == F_actin_ATP &
+	       previous_x_y_2 == F_actin_ADP : filament_extension
+
+	       previous_x_y == F_actin_ADP &
+	       previous_x_y_2 == F_actin_ATP : filament_extension
+
+	       previous_x_y == F_actin_ADP &
+	       previous_x_y_2 == F_actin_ADP : filament_extension
+	       
+	       DEFAULT : 0
+	       }
+
+	     filament_extension_minus_z {
+
+	       next_z_previous_y == F_actin_ATP &
+	       next_z_previous_y_2 == F_actin_ATP : filament_extension
+		 
+	       next_z_previous_y == F_actin_ATP &
+	       next_z_previous_y_2 == F_actin_ADP : filament_extension
+
+	       next_z_previous_y == F_actin_ADP &
+	       next_z_previous_y_2 == F_actin_ATP : filament_extension
+
+	       next_z_previous_y == F_actin_ADP &
+	       next_z_previous_y_2 == F_actin_ADP : filament_extension
+		 
+	       DEFAULT : 0
+	       }
+
+	     filament_extension_plus_z {
+
+	       previous_y_z == F_actin_ATP &
+	       previous_y_z_2 == F_actin_ATP : filament_extension
+		 
+	       previous_y_z == F_actin_ATP &
+	       previous_y_z_2 == F_actin_ADP : filament_extension
+
+	       previous_y_z == F_actin_ADP &
+	       previous_y_z_2 == F_actin_ATP : filament_extension
+
+	       previous_y_z == F_actin_ADP &
+	       previous_y_z_2 == F_actin_ADP : filament_extension
+	       
+	       DEFAULT : 0
+	       }
+
+	     Arp23_A_nucleation_1 { //Arp2/3 binding to the filament
+
+	       previous_y == F_actin_ATP & //+x
+	       next_x == F_actin_ATP : Arp23_A_nucleation_1
+
+	       previous_y == F_actin_ATP &
+	       next_x == F_actin_ADP : Arp23_A_nucleation_1
+
+	       previous_y == F_actin_ADP &
+	       next_x == F_actin_ATP : Arp23_A_nucleation_1
+
+	       previous_y == F_actin_ADP &
+	       next_x == F_actin_ADP : Arp23_A_nucleation_1
+		 
+	       previous_y == F_actin_ATP & //+z
+	       next_z == F_actin_ATP : Arp23_A_nucleation_1
+	       	 
+	       previous_y == F_actin_ATP &
+	       next_z == F_actin_ADP : Arp23_A_nucleation_1
+	       	 
+	       previous_y == F_actin_ADP &
+	       next_z == F_actin_ATP : Arp23_A_nucleation_1
+	       	 
+	       previous_y == F_actin_ADP &
+	       next_z == F_actin_ADP : Arp23_A_nucleation_1
+
+	       previous_y == F_actin_ATP & //-z
+	       previous_z == F_actin_ATP : Arp23_A_nucleation_1
+	       	 
+	       previous_y == F_actin_ATP &
+	       previous_z == F_actin_ADP : Arp23_A_nucleation_1
+	       	 
+	       previous_y == F_actin_ADP &
+	       previous_z == F_actin_ATP : Arp23_A_nucleation_1
+	       	 
+	       previous_y == F_actin_ADP &
+	       previous_z == F_actin_ADP : Arp23_A_nucleation_1
+
+	       previous_y == F_actin_ATP & //-z
+	       previous_x == F_actin_ATP : Arp23_A_nucleation_1
+	       	 
+	       previous_y == F_actin_ATP &
+	       previous_x == F_actin_ADP : Arp23_A_nucleation_1
+	       	 
+	       previous_y == F_actin_ADP &
+	       previous_x == F_actin_ATP : Arp23_A_nucleation_1
+	       	 
+	       previous_y == F_actin_ADP &
+	       previous_x == F_actin_ADP : Arp23_A_nucleation_1
+
+	       DEFAULT : 0
+	       }
+
+	     Arp23_A_nucleation_2 { //first G_actin monomer binding to Arp2/3 after nucleation
+
+	       previous_y == empty &
+	       previous_x_y == Arp23_A : Arp23_A_nucleation_2
+
+	       previous_y == empty &
+	       previous_y_z == Arp23_A : Arp23_A_nucleation_2
+
+	       previous_y == empty &
+	       next_x_previous_y == Arp23_A : Arp23_A_nucleation_2
+
+	       previous_y == empty &
+	       next_z_previous_y == Arp23_A : Arp23_A_nucleation_2
+		 
+	       DEFAULT : 0
+	       }
+
+	      depolymerization { //only from the bottom and when the next one has ADP
+
+		next_x_previous_y == empty &
+		next_y_previous_x == F_actin_ADP : depolymerization
+
+		previous_x_y == empty &
+		next_x_y == F_actin_ADP : depolymerization
+
+		next_z_previous_y == empty &
+		next_y_previous_z == F_actin_ADP : depolymerization
+
+		previous_y_z == empty &
+		next_y_z == F_actin_ADP : depolymerization
+
+		DEFAULT : 0
+		}
+
+	      Arp23_A_dissociation { //happens instantaneously when F_actin_ADP that it's attached to is removed
+
+		next_x_previous_y == empty : Arp23_A_dissociation
+		next_z_previous_y == empty : Arp23_A_dissociation
+		previous_x_y == empty : Arp23_A_dissociation
+		previous_y_z == empty : Arp23_A_dissociation
+		  
+		DEFAULT : 0
+		}
+	     
+	 }
+  }
+
+
+DEFINE_REACTIONS
+{
+
+  /* filament (barbed ends from Tania et al 2013) */
+    
+  (F_actin_ATP) -> (F_actin_ADP) [COMPLEX_RATE F_actin 0.1] //F-actin aging, i.e hydrolysis of associated ATP
+
+   G_actin_ATP + (empty) -> (F_actin_ATP) [COMPLEX_RATE F_actin add_G_actin_ATP] //G-actin binding to the first F-actin subunit (ADD RATE)
+
+    (F_actin_ADP) -> (empty) + G_actin_ADP [COMPLEX_RATE F_actin depolymerization]
+
+    (Arp23_A) -> (empty) + Arp23 [COMPLEX_RATE F_actin Arp23_A_dissociation] //only when F_actin that it's attached to is removed (does it stay activated though?)
+
+    (empty) + Arp23 -> (Arp23_A) [COMPLEX_RATE F_actin Arp23_A_nucleation_1] //Nucleation by Arp2/3
+
+    (empty) + G_actin_ATP -> (F_actin_ATP) [COMPLEX_RATE F_actin Arp23_A_nucleation_2] //First G_actin binding after Arp2/3 nucleation
+
+    G_actin_ADP -> G_actin_ATP [0.2] //random parameter
+ 
+}
+
+
+my_box BOX {
+	CORNERS = [-halfbox,-halfbox,-halfbox],[halfbox,halfbox,halfbox]
+	DEFINE_SURFACE_REGIONS{
+		my_region {
+			ELEMENT_LIST = [ALL_ELEMENTS]
+			}
+	}
+}
+
+
+Arp23_release_site SPHERICAL_RELEASE_SITE {
+	LOCATION = [0,0,0]
+	SITE_DIAMETER = 0.99
+	MOLECULE = Arp23
+	CONCENTRATION = 1e-6 
+}
+F_actin_release_site SPHERICAL_RELEASE_SITE {
+	LOCATION = [0,0,0]
+	SITE_DIAMETER = 0.99
+	MOLECULE = F_actin
+	NUMBER_TO_RELEASE = 1
+}
+G_actin_ADP_release_site SPHERICAL_RELEASE_SITE {
+	LOCATION = [0,0,0]
+	SITE_DIAMETER = 0.99
+	MOLECULE = G_actin_ADP
+	CONCENTRATION = 1e-5
+}
+
+
+
+INSTANTIATE world OBJECT
+{
+	system OBJECT my_box { }
+	Arp23_release_site OBJECT Arp23_release_site { }
+	F_actin_release_site OBJECT F_actin_release_site { }
+	G_actin_ADP_release_site OBJECT G_actin_ADP_release_site { }
+}
+
+
+VIZ_OUTPUT {
+	MODE = CELLBLENDER
+	FILENAME = "./viz_data/test_visualised"
+
+
+	MOLECULES {
+		NAME_LIST {ALL_MOLECULES}
+		ITERATION_NUMBERS {ALL_DATA @ ALL_ITERATIONS}
+	}
+	
+
+}
+
+
+REACTION_DATA_OUTPUT
+{
+	STEP = dt * 1
+	
+	{COUNT[F_actin_ATP,WORLD]} => "./react_data/F_actin_ATP.dat"
+        {COUNT[F_actin_ADP,WORLD]} => "./react_data/F_actin_ADP.dat"
+        {COUNT[G_actin_ATP,WORLD]} => "./react_data/G_actin_ATP.dat"
+        {COUNT[G_actin_ADP,WORLD]} => "./react_data/G_actin_ADP.dat"
+ }
