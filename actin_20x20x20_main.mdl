@@ -1,9 +1,8 @@
-/* Kadri Pajo January 2017 */
+/* Kadri Pajo 30 January 2017 */
 /* edited by Melanie Stefan, 2017 */
 
-
 iterations = 2e5
-dt = 5e-2
+dt = 1e-4
 halfbox = 0.5
 
 TIME_STEP = dt
@@ -20,6 +19,7 @@ fast_ATP_to_ADP = 2
 shifting = 1e10
 instant_tagging = 5e100
 filament_severing = 5e100
+dissociation = 0.1 //I tried to decrease Arp2/3 dissociation speed since it was sometimes disappearing during shifting and I had the feeling that maybe they shift with slightly fluctuating speeds, but this doesn't seem to help
 
 PARTITION_X = [[-halfbox TO halfbox STEP halfbox/5]]
 PARTITION_Y = [[-halfbox TO halfbox STEP halfbox/5]]
@@ -46,6 +46,10 @@ DEFINE_MOLECULES
 	G_actin_ADP {DIFFUSION_CONSTANT_3D = 1e-6}
 	G_actin_ATP {DIFFUSION_CONSTANT_3D = 1e-6}	
 }
+
+
+
+INCLUDE_FILE="actin_20x20x20_complex.mdl"
 
 
 DEFINE_REACTIONS

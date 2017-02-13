@@ -1,7 +1,7 @@
-/* Kadri Pajo January 2017 */
+/* Kadri Pajo 30th January 2017 */
 
 iterations = 2e5
-dt = 5e-2
+dt = 1e-4
 halfbox = 0.5
 
 TIME_STEP = dt
@@ -18,6 +18,7 @@ fast_ATP_to_ADP = 2
 shifting = 1e10
 instant_tagging = 5e100
 filament_severing = 5e100
+dissociation = 0.1 //I tried to decrease Arp2/3 dissociation speed since it was sometimes disappearing during shifting and I had the feeling that maybe they shift with slightly fluctuating speeds, but this doesn't seem to help
 
 PARTITION_X = [[-halfbox TO halfbox STEP halfbox/5]]
 PARTITION_Y = [[-halfbox TO halfbox STEP halfbox/5]]
@@ -8705,8 +8706,8 @@ SUBUNIT[20, 20, 20, 1] = [0.095000, 0.095000, 0.095000]
 	     Arp23_establishment { //When a monomer has bound to Arp2/3 quickly becomes "inert" to avoid branching off twice
 	       
 	       next_y_z == F_actin_ATP : instant_tagging
-	       next_x_y == F_actin_ATP :  instant_tagging
-	       next_x_y_z == F_actin_ATP :  instant_tagging
+	       next_x_y == F_actin_ATP : instant_tagging
+	       next_x_y_z == F_actin_ATP : instant_tagging
 	       next_x_y_previous_z == F_actin_ATP : instant_tagging
 	       next_y_previous_x == F_actin_ATP : instant_tagging
 	       next_y_previous_x_z == F_actin_ATP : instant_tagging
@@ -8757,7 +8758,7 @@ SUBUNIT[20, 20, 20, 1] = [0.095000, 0.095000, 0.095000]
 
 	      Arp23_dissociation { //Remove Arp2/3 instantaneously when F-actin that it's attached to is depolymerized
 
-		previous_y == empty : instant_tagging
+		previous_y == empty : dissociation
 		  
 		DEFAULT : 0
 		}

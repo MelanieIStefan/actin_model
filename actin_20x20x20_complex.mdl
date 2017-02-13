@@ -8658,8 +8658,8 @@ SUBUNIT[20, 20, 20, 1] = [0.095000, 0.095000, 0.095000]
 	     Arp23_establishment { //When a monomer has bound to Arp2/3 quickly becomes "inert" to avoid branching off twice
 	       
 	       next_y_z == F_actin_ATP : instant_tagging
-	       next_x_y == F_actin_ATP :  instant_tagging
-	       next_x_y_z == F_actin_ATP :  instant_tagging
+	       next_x_y == F_actin_ATP : instant_tagging
+	       next_x_y_z == F_actin_ATP : instant_tagging
 	       next_x_y_previous_z == F_actin_ATP : instant_tagging
 	       next_y_previous_x == F_actin_ATP : instant_tagging
 	       next_y_previous_x_z == F_actin_ATP : instant_tagging
@@ -8710,7 +8710,7 @@ SUBUNIT[20, 20, 20, 1] = [0.095000, 0.095000, 0.095000]
 
 	      Arp23_dissociation { //Remove Arp2/3 instantaneously when F-actin that it's attached to is depolymerized
 
-		previous_y == empty : instant_tagging
+		previous_y == empty : dissociation
 		  
 		DEFAULT : 0
 		}
@@ -8873,5 +8873,6 @@ SUBUNIT[20, 20, 20, 1] = [0.095000, 0.095000, 0.095000]
 		}
 	     
 	 }
-}
+  }
+
 
