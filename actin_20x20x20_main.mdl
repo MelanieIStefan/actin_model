@@ -183,7 +183,7 @@ VIZ_OUTPUT {
 
 	MOLECULES {
 		NAME_LIST {ALL_MOLECULES}
-		ITERATION_NUMBERS {ALL_DATA @ ALL_ITERATIONS}
+		ITERATION_NUMBERS {ALL_DATA @ [[0 TO iterations STEP dt*1e6]]}
 	}
 	
 
@@ -192,7 +192,7 @@ VIZ_OUTPUT {
 
 REACTION_DATA_OUTPUT
 {
-	STEP = dt * 1
+	STEP = dt * 1e6
 	
 	{COUNT[F_actin_ATP,WORLD]} => "./react_data/F_actin_ATP.dat"
         {COUNT[F_actin_ADP,WORLD]} => "./react_data/F_actin_ADP.dat"
