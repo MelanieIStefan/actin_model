@@ -1,8 +1,8 @@
 /* Kadri Pajo 30 January 2017 */
 /* edited by Melanie Stefan, 2017 */
 
-iterations = 2e9
-dt = 1e-8
+iterations = 200
+dt = 1e-4
 halfbox = 0.5
 
 TIME_STEP = dt
