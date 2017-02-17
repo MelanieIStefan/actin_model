@@ -2,7 +2,7 @@
 /* edited by Melanie Stefan, 2017 */
 
 iterations = 200
-dt = 1e-7
+dt = 1e-8
 halfbox = 0.5
 
 TIME_STEP = dt
