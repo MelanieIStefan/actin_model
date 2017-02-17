@@ -39,7 +39,7 @@ DEFINE_MOLECULES
 	F_actin_ATP_sev_1 {DIFFUSION_CONSTANT_3D = 1e-6} //complex
 	F_actin_ATP_sev_2 {DIFFUSION_CONSTANT_3D = 1e-6} //complex
 	F_actin_ATP_shifted {DIFFUSION_CONSTANT_3D = 1e-6} //complex
-	G_actin_ADP {DIFFUSION_CONSTANT_3D = 1e-6, TARGET_ONLY}
+	G_actin_ADP {DIFFUSION_CONSTANT_3D = 1e-6 TARGET_ONLY}
 	G_actin_ATP {DIFFUSION_CONSTANT_3D = 1e-6}	
 }
 
