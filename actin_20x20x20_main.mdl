@@ -21,9 +21,9 @@ instant_tagging = 1e8
 filament_severing = 1e8
 dissociation = 0.1 //I tried to decrease Arp2/3 dissociation speed since it was sometimes disappearing during shifting and I had the feeling that maybe they shift with slightly fluctuating speeds, but this doesn't seem to help
 
-PARTITION_X = [[-halfbox TO halfbox STEP halfbox/5]]
-PARTITION_Y = [[-halfbox TO halfbox STEP halfbox/5]]
-PARTITION_Z = [[-halfbox TO halfbox STEP halfbox/5]]
+PARTITION_X = [[-halfbox TO halfbox STEP halfbox/10]]
+PARTITION_Y = [[-halfbox TO halfbox STEP halfbox/10]]
+PARTITION_Z = [[-halfbox TO halfbox STEP halfbox/10]]
 
 DEFINE_MOLECULES
 {
