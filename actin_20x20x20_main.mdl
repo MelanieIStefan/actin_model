@@ -16,9 +16,9 @@ depolymerization = 0.03
 slow_ATP_to_ADP = 0.005
 medium_ATP_to_ADP = 1
 fast_ATP_to_ADP = 2
-shifting = 1e10
-instant_tagging = 1e12
-filament_severing = 1e12
+shifting = 1e8
+instant_tagging = 1e8
+filament_severing = 1e8
 dissociation = 0.1 //I tried to decrease Arp2/3 dissociation speed since it was sometimes disappearing during shifting and I had the feeling that maybe they shift with slightly fluctuating speeds, but this doesn't seem to help
 
 PARTITION_X = [[-halfbox TO halfbox STEP halfbox/5]]
