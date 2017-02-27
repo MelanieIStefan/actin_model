@@ -19,6 +19,7 @@ fast_ATP_to_ADP = 2
 shifting = 1e6
 instant_tagging = 1e6
 filament_severing = 1e6
+tag_decay = 5e5 //random parameter; chosen to be slightly slower than shifting
 dissociation = 0.1 //I tried to decrease Arp2/3 dissociation speed since it was sometimes disappearing during shifting and I had the feeling that maybe they shift with slightly fluctuating speeds, but this doesn't seem to help
 
 DEFINE_MOLECULES
@@ -111,15 +112,15 @@ DEFINE_REACTIONS
 
     /* Tag decay slightly slower than shifting in case of errors when no movement occurs*/
 
-    (F_actin_ADP_sev_1) -> (F_actin_ADP) [5e7] //random parameter
+    (F_actin_ADP_sev_1) -> (F_actin_ADP) [tag_decay]
 
-    (F_actin_ADP_sev_2) -> (F_actin_ADP) [5e7]
+    (F_actin_ADP_sev_2) -> (F_actin_ADP) [tag_decay]
 
-    (F_actin_ATP_sev_1) -> (F_actin_ATP) [5e7]
+    (F_actin_ATP_sev_1) -> (F_actin_ATP) [tag_decay]
 
-    (F_actin_ATP_sev_2) -> (F_actin_ATP) [5e7]
+    (F_actin_ATP_sev_2) -> (F_actin_ATP) [tag_decay]
 
-    (Arp23_A_sev) -> (Arp23_bound) [5e7]
+    (Arp23_A_sev) -> (Arp23_bound) [tag_decay]
 
  
 }
