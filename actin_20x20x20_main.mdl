@@ -11,7 +11,7 @@ INTERACTION_RADIUS = 0.003
 
 filament_extension = 6e4
 Arp23_A_nucleation_1 = 54000
-Arp23_A_nucleation_2 = 6e6
+Arp23_A_nucleation_2 = 1e5
 depolymerization = 0.03
 slow_ATP_to_ADP = 0.005
 medium_ATP_to_ADP = 1
