@@ -1,7 +1,7 @@
 /* Kadri Pajo 30 January 2017 */
 /* edited by Melanie Stefan, 2017 */
 
-iterations = 1e4
+iterations = 1e5
 dt = 1e-6
 halfbox = 0.5
 
