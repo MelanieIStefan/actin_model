@@ -149,7 +149,7 @@ Cofilin_A_release_site CUBIC_RELEASE_SITE {
 	CONCENTRATION = 1e-6
 }
 F_actin_release_site CUBIC_RELEASE_SITE {
-	LOCATION = [-0.05,-0.5,-0.35]
+	LOCATION = [0,0,0]
 	SITE_DIAMETER = 0.1
 	MOLECULE = F_actin
 	NUMBER_TO_RELEASE = 1
