@@ -3,7 +3,7 @@
 
 iterations = 1e4
 dt = 1e-6
-halfbox = 0.5
+halfbox = 0.01
 
 TIME_STEP = dt
 ITERATIONS = iterations
@@ -127,7 +127,7 @@ DEFINE_REACTIONS
 
 
 my_box BOX {
-	CORNERS = [-halfbox,-halfbox,-halfbox],[halfbox,halfbox,halfbox]
+	CORNERS = [0,0,0],[halfbox,halfbox,halfbox]
 	DEFINE_SURFACE_REGIONS{
 		my_region {
 			ELEMENT_LIST = [ALL_ELEMENTS]
@@ -140,13 +140,13 @@ Arp23_release_site SPHERICAL_RELEASE_SITE {
 	LOCATION = [0.05,0.05,0.05]
 	SITE_DIAMETER = 0.05
 	MOLECULE = Arp23
-	CONCENTRATION = 1e-6 
+	CONCENTRATION = 1e-5 
 }
 Cofilin_A_release_site SPHERICAL_RELEASE_SITE {
 	LOCATION = [0.05,0.05,0.05]
 	SITE_DIAMETER = 0.05
 	MOLECULE = Cofilin_A
-	CONCENTRATION = 1e-6
+	CONCENTRATION = 1e-5
 }
 F_actin_release_site SPHERICAL_RELEASE_SITE {
 	LOCATION = [0,0,0]
@@ -158,7 +158,7 @@ G_actin_ADP_release_site SPHERICAL_RELEASE_SITE {
 	LOCATION = [0.05,0.05,0.05]
 	SITE_DIAMETER = 0.05
 	MOLECULE = G_actin_ADP
-	CONCENTRATION = 1e-5
+	CONCENTRATION = 1e-4
 }
 
 
