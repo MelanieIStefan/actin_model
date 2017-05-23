@@ -1,9 +1,9 @@
 /* Kadri Pajo 30 January 2017 */
 /* edited by Melanie Stefan, 2017 */
 
-iterations = 1e4
+iterations = 1e5
 dt = 1e-6
-halfbox = 0.01
+halfbox = 0.1
 
 TIME_STEP = dt
 ITERATIONS = iterations
@@ -150,7 +150,7 @@ Cofilin_A_release_site SPHERICAL_RELEASE_SITE {
 }
 F_actin_release_site SPHERICAL_RELEASE_SITE {
 	LOCATION = [0,0,0]
-	SITE_DIAMETER = 0.99
+	SITE_DIAMETER = 0
 	MOLECULE = F_actin
 	NUMBER_TO_RELEASE = 1
 }
