@@ -8835,9 +8835,9 @@ SUBUNIT[20, 20, 20, 1] = [0.095000, 0.095000, 0.095000]
 
 	      shifting_step_2 { //Empty the original subunits after the intermediates are generated
 
-		next_x_previous_y == F_actin_ATP_shifted : shifting
-	        next_x_previous_y == F_actin_ADP_shifted : shifting
-	       	next_x_previous_y == Arp23_A_shifted : shifting
+		next_x_previous_y == F_actin_ATP_shifted : after_shifting
+	        next_x_previous_y == F_actin_ADP_shifted : after_shifting
+	       	next_x_previous_y == Arp23_A_shifted : after_shifting
 
 		DEFAULT : 0
 		}
@@ -8865,9 +8865,9 @@ SUBUNIT[20, 20, 20, 1] = [0.095000, 0.095000, 0.095000]
 
 	      shifting_step_4 { //Empty the intermediates when the filament is regenerated in a new location
 
-		next_x_previous_y == F_actin_ATP : shifting
-	        next_x_previous_y == F_actin_ADP : shifting
-	       	next_x_previous_y == Arp23_bound : shifting
+		next_x_previous_y == F_actin_ATP : after_shifting
+	        next_x_previous_y == F_actin_ADP : after_shifting
+	       	next_x_previous_y == Arp23_bound : after_shifting
 
 		DEFAULT : 0
 		}

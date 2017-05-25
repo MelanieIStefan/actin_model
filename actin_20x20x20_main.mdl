@@ -17,6 +17,7 @@ slow_ATP_to_ADP = 0.005
 medium_ATP_to_ADP = 1
 fast_ATP_to_ADP = 2
 shifting = 1e6
+after_shifting = 1e7 // has to be faster than shifting
 instant_tagging = 1e6
 filament_severing = 1e6
 tag_decay_slow = 1e4 //random parameter; chosen to be slightly slower than shifting
