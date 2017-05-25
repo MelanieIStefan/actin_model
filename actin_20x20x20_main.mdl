@@ -1,9 +1,9 @@
 /* Kadri Pajo 30 January 2017 */
 /* edited by Melanie Stefan, 2017 */
 
-iterations = 1e5
-dt = 1e-6
-box = 0.1
+iterations = 1e7
+dt = 1e-7
+halfbox = 0.1
 
 TIME_STEP = dt
 ITERATIONS = iterations
@@ -19,7 +19,7 @@ fast_ATP_to_ADP = 2
 shifting = 1e6
 instant_tagging = 1e6
 filament_severing = 1e6
-tag_decay = 5e5 //random parameter; chosen to be slightly slower than shifting
+tag_decay_slow = 1e4 //random parameter; chosen to be slightly slower than shifting
 dissociation = 0.1 //I tried to decrease Arp2/3 dissociation speed since it was sometimes disappearing during shifting and I had the feeling that maybe they shift with slightly fluctuating speeds, but this doesn't seem to help
 
 DEFINE_MOLECULES
@@ -28,6 +28,7 @@ DEFINE_MOLECULES
         Arp23_A {DIFFUSION_CONSTANT_3D = 1e-6} //complex
 	Arp23_A_sev {DIFFUSION_CONSTANT_3D = 1e-6} //complex
 	Arp23_A_shifted {DIFFUSION_CONSTANT_3D = 1e-6} //complex
+	Arp23_A_decayed {DIFFUSION_CONSTANT_3D = 1e-6} //complex
 	Arp23_bound {DIFFUSION_CONSTANT_3D = 1e-6} //complex
 	border {DIFFUSION_CONSTANT_3D = 1e-6} //complex
 	Cofilin_A {DIFFUSION_CONSTANT_3D = 1e-6} 
@@ -36,10 +37,12 @@ DEFINE_MOLECULES
 	F_actin_ADP_sev_1 {DIFFUSION_CONSTANT_3D = 1e-6} //complex
 	F_actin_ADP_sev_2 {DIFFUSION_CONSTANT_3D = 1e-6} //complex
 	F_actin_ADP_shifted {DIFFUSION_CONSTANT_3D = 1e-6} //complex
+	F_actin_ADP_decayed {DIFFUSION_CONSTANT_3D = 1e-6} //complex
 	F_actin_ATP {DIFFUSION_CONSTANT_3D = 1e-6} //complex
 	F_actin_ATP_sev_1 {DIFFUSION_CONSTANT_3D = 1e-6} //complex
 	F_actin_ATP_sev_2 {DIFFUSION_CONSTANT_3D = 1e-6} //complex
 	F_actin_ATP_shifted {DIFFUSION_CONSTANT_3D = 1e-6} //complex
+	F_actin_ATP_decayed {DIFFUSION_CONSTANT_3D = 1e-6} //complex
 	G_actin_ADP {DIFFUSION_CONSTANT_3D = 1e-6 TARGET_ONLY}
 	G_actin_ATP {DIFFUSION_CONSTANT_3D = 1e-6}	
 }
@@ -112,22 +115,30 @@ DEFINE_REACTIONS
 
     /* Tag decay slightly slower than shifting in case of errors when no movement occurs*/
 
-    (F_actin_ADP_sev_1) -> (F_actin_ADP) [tag_decay]
+    (F_actin_ADP_sev_1) -> (F_actin_ADP_decayed) [COMPLEX_RATE F_actin tag_decay]
 
-    (F_actin_ADP_sev_2) -> (F_actin_ADP) [tag_decay]
+    (F_actin_ADP_sev_2) -> (F_actin_ADP_decayed) [COMPLEX_RATE F_actin tag_decay]
 
-    (F_actin_ATP_sev_1) -> (F_actin_ATP) [tag_decay]
+    (F_actin_ATP_sev_1) -> (F_actin_ATP_decayed) [COMPLEX_RATE F_actin tag_decay]
 
-    (F_actin_ATP_sev_2) -> (F_actin_ATP) [tag_decay]
+    (F_actin_ATP_sev_2) -> (F_actin_ATP_decayed) [COMPLEX_RATE F_actin tag_decay]
 
-    (Arp23_A_sev) -> (Arp23_bound) [tag_decay]
+    (Arp23_A_sev) -> (Arp23_A_decayed) [COMPLEX_RATE F_actin tag_decay]
+
+    /* Tag removal*/
+
+    (F_actin_ADP_decayed) -> (F_actin_ADP) [instant_tagging]
+
+    (F_actin_ATP_decayed) -> (F_actin_ATP) [instant_tagging]
+
+    (Arp23_A_decayed) -> (Arp23_bound) [instant_tagging]
 
  
 }
 
 
 my_box BOX {
-	CORNERS = [0,0,0],[box,box,box]
+	CORNERS = [0,0,0],[halfbox,halfbox,halfbox]
 	DEFINE_SURFACE_REGIONS{
 		my_region {
 			ELEMENT_LIST = [ALL_ELEMENTS]
@@ -136,29 +147,31 @@ my_box BOX {
 }
 
 
-Arp23_release_site CUBIC_RELEASE_SITE {
-	LOCATION = [0,0,0]
-	SITE_DIAMETER = 0.1
+
+Arp23_release_site SPHERICAL_RELEASE_SITE {
+	LOCATION = [0.05,0.05,0.05]
+	SITE_DIAMETER = 0.05
 	MOLECULE = Arp23
-	CONCENTRATION = 1e-6 
+	CONCENTRATION = 1e-4
 }
-Cofilin_A_release_site CUBIC_RELEASE_SITE {
-	LOCATION = [0,0,0]
-	SITE_DIAMETER = 0.1
+
+Cofilin_A_release_site SPHERICAL_RELEASE_SITE {
+	LOCATION = [0.05,0.05,0.05]
+	SITE_DIAMETER = 0.05
 	MOLECULE = Cofilin_A
-	CONCENTRATION = 1e-6
+	CONCENTRATION = 1e-4
 }
-F_actin_release_site CUBIC_RELEASE_SITE {
+F_actin_release_site SPHERICAL_RELEASE_SITE {
 	LOCATION = [0,0,0]
-	SITE_DIAMETER = 0.1
+	SITE_DIAMETER = 0
 	MOLECULE = F_actin
 	NUMBER_TO_RELEASE = 1
 }
-G_actin_ADP_release_site CUBIC_RELEASE_SITE {
-	LOCATION = [0,0,0]
-	SITE_DIAMETER = 0.1
+G_actin_ADP_release_site SPHERICAL_RELEASE_SITE {
+	LOCATION = [0.05,0.05,0.05]
+	SITE_DIAMETER = 0.05
 	MOLECULE = G_actin_ADP
-	CONCENTRATION = 1e-5
+	CONCENTRATION = 1e-3
 }
 
 
