@@ -71,7 +71,7 @@ DEFINE_REACTIONS
 
    /* Filament severing and shifting */
 
-    (F_actin_ADP) + Cofilin_A -> (F_actin_ADP_sev_1) [COMPLEX_RATE F_actin filament_severing] //enzymatic with 4 cofilin molecules? Cofilin currently joining the subunit
+    (F_actin_ADP) + Cofilin_A -> (F_actin_ADP_sev_1) + Cofilin_A [COMPLEX_RATE F_actin filament_severing] //enzymatic with 4 cofilin molecules? Cofilin currently joining the subunit
 
     (F_actin_ADP) -> (F_actin_ADP_sev_1) [COMPLEX_RATE F_actin F_actin_tagging_after_severing_1]
 
