@@ -20,7 +20,7 @@ shifting = 1e6
 after_shifting = 1e7 // has to be faster than shifting
 instant_tagging = 1e6
 filament_severing = 1e6
-tag_decay_slow = 1e4 //random parameter; chosen to be slightly slower than shifting
+tag_decay = 1e5 //random parameter; chosen to be slower than shifting
 dissociation = 0.1 //I tried to decrease Arp2/3 dissociation speed since it was sometimes disappearing during shifting and I had the feeling that maybe they shift with slightly fluctuating speeds, but this doesn't seem to help
 
 DEFINE_MOLECULES
@@ -29,7 +29,6 @@ DEFINE_MOLECULES
         Arp23_A {DIFFUSION_CONSTANT_3D = 1e-6} //complex
 	Arp23_A_sev {DIFFUSION_CONSTANT_3D = 1e-6} //complex
 	Arp23_A_shifted {DIFFUSION_CONSTANT_3D = 1e-6} //complex
-	Arp23_A_decayed {DIFFUSION_CONSTANT_3D = 1e-6} //complex
 	Arp23_bound {DIFFUSION_CONSTANT_3D = 1e-6} //complex
 	border {DIFFUSION_CONSTANT_3D = 1e-6} //complex
 	Cofilin_A {DIFFUSION_CONSTANT_3D = 1e-6} 
@@ -38,12 +37,10 @@ DEFINE_MOLECULES
 	F_actin_ADP_sev_1 {DIFFUSION_CONSTANT_3D = 1e-6} //complex
 	F_actin_ADP_sev_2 {DIFFUSION_CONSTANT_3D = 1e-6} //complex
 	F_actin_ADP_shifted {DIFFUSION_CONSTANT_3D = 1e-6} //complex
-	F_actin_ADP_decayed {DIFFUSION_CONSTANT_3D = 1e-6} //complex
 	F_actin_ATP {DIFFUSION_CONSTANT_3D = 1e-6} //complex
 	F_actin_ATP_sev_1 {DIFFUSION_CONSTANT_3D = 1e-6} //complex
 	F_actin_ATP_sev_2 {DIFFUSION_CONSTANT_3D = 1e-6} //complex
 	F_actin_ATP_shifted {DIFFUSION_CONSTANT_3D = 1e-6} //complex
-	F_actin_ATP_decayed {DIFFUSION_CONSTANT_3D = 1e-6} //complex
 	G_actin_ADP {DIFFUSION_CONSTANT_3D = 1e-6 TARGET_ONLY}
 	G_actin_ATP {DIFFUSION_CONSTANT_3D = 1e-6}	
 }
@@ -116,23 +113,15 @@ DEFINE_REACTIONS
 
     /* Tag decay slightly slower than shifting in case of errors when no movement occurs*/
 
-    (F_actin_ADP_sev_1) -> (F_actin_ADP_decayed) [COMPLEX_RATE F_actin tag_decay]
+    (F_actin_ADP_sev_1) -> (F_actin_ADP) [tag_decay]
 
-    (F_actin_ADP_sev_2) -> (F_actin_ADP_decayed) [COMPLEX_RATE F_actin tag_decay]
+    (F_actin_ADP_sev_2) -> (F_actin_ADP) [tag_decay]
 
-    (F_actin_ATP_sev_1) -> (F_actin_ATP_decayed) [COMPLEX_RATE F_actin tag_decay]
+    (F_actin_ATP_sev_1) -> (F_actin_ATP) [tag_decay]
 
-    (F_actin_ATP_sev_2) -> (F_actin_ATP_decayed) [COMPLEX_RATE F_actin tag_decay]
+    (F_actin_ATP_sev_2) -> (F_actin_ATP) [tag_decay]
 
-    (Arp23_A_sev) -> (Arp23_A_decayed) [COMPLEX_RATE F_actin tag_decay]
-
-    /* Tag removal*/
-
-    (F_actin_ADP_decayed) -> (F_actin_ADP) [instant_tagging]
-
-    (F_actin_ATP_decayed) -> (F_actin_ATP) [instant_tagging]
-
-    (Arp23_A_decayed) -> (Arp23_bound) [instant_tagging]
+    (Arp23_A_sev) -> (Arp23_bound) [tag_decay]
 
  
 }

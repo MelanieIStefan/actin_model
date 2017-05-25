@@ -8872,37 +8872,6 @@ SUBUNIT[20, 20, 20, 1] = [0.095000, 0.095000, 0.095000]
 		DEFAULT : 0
 		}
 
-	      tag_decay { //Eventual tag decay if shifting is impossible; slow at first, then spreads through filament fast
-
-		next_x_previous_y == Arp23_A_decayed : instant_tagging //Tagging originates from the mother filament
-		previous_x_y == Arp23_A_decayed : instant_tagging
-		previous_y_z == Arp23_A_decayed : instant_tagging
-		next_z_previous_y == Arp23_A_decayed : instant_tagging
-		next_y == Arp23_A_decayed : instant_tagging //Tagging originates from the daughter filament
-
-		/* Tag the rest of the filament */
-
-		next_x_previous_y == F_actin_ATP_decayed : instant_tagging 
-		next_x_previous_y == F_actin_ADP_decayed : instant_tagging
-		previous_x_y == F_actin_ATP_decayed : instant_tagging
-		previous_x_y == F_actin_ADP_decayed : instant_tagging
-		previous_y_z == F_actin_ATP_decayed : instant_tagging
-		previous_y_z == F_actin_ADP_decayed : instant_tagging
-		next_z_previous_y == F_actin_ATP_decayed : instant_tagging
-		next_z_previous_y == F_actin_ADP_decayed : instant_tagging
-		next_y_previous_x == F_actin_ATP_decayed : instant_tagging
-		next_y_previous_x == F_actin_ADP_decayed : instant_tagging
-		next_x_y == F_actin_ATP_decayed : instant_tagging
-		next_x_y == F_actin_ADP_decayed : instant_tagging
-		next_y_z == F_actin_ATP_decayed : instant_tagging
-		next_y_z == F_actin_ADP_decayed : instant_tagging
-		next_y_previous_z == F_actin_ATP_decayed : instant_tagging
-		next_y_previous_z == F_actin_ADP_decayed : instant_tagging
-
-
-
-		DEFAULT : tag_decay_slow
-		}
 
 
 	     
